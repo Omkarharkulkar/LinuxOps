@@ -1,0 +1,13 @@
+# Generated reports
+reports/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Secrets and environment files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
