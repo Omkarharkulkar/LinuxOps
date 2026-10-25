@@ -1,0 +1,55 @@
+=======================================
+       LINUXOPS SYSTEM BASELINE
+=======================================
+Generated : Example report
+
+------ SYSTEM INFORMATION -----
+linuxops-lab
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+
+-----KERNEL INFORMATION-----
+Linux linuxops-lab 7.0.0-38-generic #38~24.04.4-Ubuntu SMP PREEMPT_DYNAMIC x86_64 GNU/Linux
+
+-----CURRENT USER-----
+labuser
+
+-----MEMORY USAGE-----
+               total        used        free      shared  buff/cache   available
+Mem:           2.9Gi       1.5Gi       304Mi        41Mi       1.0Gi       1.4Gi
+Swap:          2.9Gi       524Mi       2.4Gi
+
+-----DISK USAGE-----
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs           297M  2.0M  295M   1% /run
+/dev/sda2        30G  9.6G   19G  35% /
+tmpfs           1.5G     0  1.5G   0% /dev/shm
+tmpfs           5.0M  8.0K  5.0M   1% /run/lock
+tmpfs           297M  116K  297M   1% /run/user/1000
+
+-----UPTIME-----
+Example uptime and load average
+
+-----IP ADDRESSES-----
+lo               UNKNOWN        127.0.0.1/8 ::1/128
+eth0             UP             192.0.2.25/24
+
+=======================================
+End of sanitized example report
+=======================================
+
+Note: This is a sanitized presentation example based on LinuxOps system
+baseline output. Host-specific identifiers, generation time, and network
+details have been replaced with example values. Some diagnostic values
+are retained from the original sample for demonstration purposes.

@@ -216,9 +216,19 @@ The tests validate the scenarios they cover; they do not guarantee behavior on e
 
 ## Reports
 
-Diagnostic scripts generate timestamped text reports under `reports/`.
+LinuxOps diagnostic scripts generate timestamped text reports under `reports/`.
 
-These reports can be used to review system information and troubleshooting findings. Generated reports may contain environment-specific information, so inspect them before sharing publicly.
+Generated reports are ignored by Git by default because they may contain environment-specific information. Sanitized presentation examples are maintained in `reports/examples/`.
+
+### Sample Reports
+
+The repository includes the following sample reports to demonstrate the project's output:
+
+- [System Baseline Report](reports/examples/sample_system_baseline_report.txt) — system information, memory usage, disk utilization, uptime, and network interfaces.
+- [Authentication Analysis Report](reports/examples/sample_authentication_report.txt) — failed SSH password attempts, invalid-user attempts, and successful authentications from a sample log.
+- [Network Diagnostics Report](reports/examples/sample_network_diagnostics_report.txt) — example network interfaces, routing, DNS, and listening-port information.
+
+These examples are intended for demonstration and may be sanitized or reconstructed rather than verbatim copies of actual script output. Review generated reports for sensitive information before sharing them publicly.
 
 ## Security & Scope
 

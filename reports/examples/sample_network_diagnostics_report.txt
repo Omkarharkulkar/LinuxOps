@@ -1,0 +1,45 @@
+======================================
+ LINUXOPS NETWORK DIAGNOSTICS REPORT
+======================================
+Generated: Example report
+Hostname: linuxops-lab
+
+----- NETWORK INTERFACES -----
+lo               UNKNOWN        127.0.0.1/8
+eth0             UP             192.0.2.25/24
+
+----- IPV4 ADDRESSES -----
+lo               UNKNOWN        127.0.0.1/8
+eth0             UP             192.0.2.25/24
+
+----- ROUTING TABLE -----
+default via 192.0.2.1 dev eth0
+192.0.2.0/24 dev eth0
+
+INFO: A default route is configured.
+
+----- DNS CONFIGURATION -----
+DNS configuration is available.
+DNS server: [SANITIZED]
+
+----- DNS RESOLUTION TEST -----
+example.com resolved successfully.
+
+INFO: DNS/name resolution returned results for example.com.
+
+----- LISTENING TCP AND UDP PORTS -----
+Netid  State   Local Address:Port
+udp    UNCONN  127.0.0.53:53
+tcp    LISTEN  127.0.0.53:53
+tcp    LISTEN  127.0.0.1:631
+
+----- ROUTE SELECTION TEST -----
+Route to 1.1.1.1 selected through the configured gateway.
+
+INFO: Linux found a route toward 1.1.1.1.
+
+======================================
+End of sanitized example report
+======================================
+
+Note: This is a sanitized presentation example, not a verbatim copy of the original diagnostic output. Network addresses and selected details have been replaced with documentation examples.

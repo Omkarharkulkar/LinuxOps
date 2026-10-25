@@ -1,5 +1,9 @@
-# Generated reports
-reports/
+# Generated reports are ignored by default
+reports/*
+
+# Allow approved examples
+!reports/examples/
+!reports/examples/*.txt
 
 # Python cache
 __pycache__/
