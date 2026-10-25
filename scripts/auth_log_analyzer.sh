@@ -2,8 +2,9 @@
 
 set -uo pipefail
 
-LOG_FILE="/var/log/auth.log"
-REPORT_DIR="$HOME/linuxops/reports"
+LOG_FILE="${1:-/var/log/auth.log}"
+PROJECT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+REPORT_DIR="$PROJECT_DIR/reports"
 TIMESTAMP=$(date '+%Y-%m-%d_%H-%M-%S')
 REPORT_FILE="$REPORT_DIR/auth_report_$TIMESTAMP.txt"
 

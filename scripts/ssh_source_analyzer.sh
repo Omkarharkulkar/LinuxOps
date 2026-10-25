@@ -39,11 +39,40 @@ if ! {
         sort |
         uniq -c |
         sort -nr || true
+    echo
+    echo "----- THRESHOLD-BASED FINDINGS -----"
+
+    THRESHOLD=2
+    FAILED_COUNTS="$(
+        grep -aEi 'sshd.*Failed password for ' "$LOG_FILE" |
+            grep -oE 'from ([0-9]{1,3}\.){3}[0-9]{1,3}' |
+            awk '{print $2}' |
+            sort |
+            uniq -c |
+            sort -nr || true
+    )"
+
+    if [[ -z "$FAILED_COUNTS" ]]; then
+        echo "INFO: No failed SSH password attempts with a source IP were found."
+    else
+        while read -r COUNT IP; do
+            [[ -n "${COUNT:-}" && -n "${IP:-}" ]] || continue
+
+            if (( COUNT >= THRESHOLD )); then
+                printf 'ALERT: %s failed attempts from %s (threshold: %s)\n' \
+                    "$COUNT" "$IP" "$THRESHOLD"
+            else
+                printf 'INFO: %s failed attempt(s) from %s; below threshold.\n' \
+                    "$COUNT" "$IP"
+            fi
+        done <<< "$FAILED_COUNTS"
+    fi
 
     echo
     echo "----- INTERPRETATION -----"
     echo "Repeated events from one address may warrant investigation."
-    echo "Counts alone do not establish malicious activity."
+    echo "Threshold alerts are indicators for review, not proof of malicious activity."
+
 
 } > "$REPORT_FILE" 2>&1; then
     echo "ERROR: Report generation failed."

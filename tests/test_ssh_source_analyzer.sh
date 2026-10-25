@@ -71,6 +71,34 @@ if [[ -n "$report" && -f "$report" ]]; then
     else
         fail "Successful login excluded from failed-attempt counts"
     fi
+
+    # Test 7: Threshold findings section exists
+    if grep -Fq -- "----- THRESHOLD-BASED FINDINGS -----" "$report"; then
+        pass "Threshold-based findings section exists"
+    else
+        fail "Threshold-based findings section exists"
+    fi
+
+    # Test 8: Reaching the threshold triggers an alert
+    if grep -Fq -- "ALERT: 2 failed attempts from 192.0.2.10 (threshold: 2)" "$report"; then
+        pass "Alert generated when source reaches threshold"
+    else
+        fail "Alert generated when source reaches threshold"
+    fi
+
+    # Test 9: Below-threshold activity is informational
+    if grep -Fq -- "INFO: 1 failed attempt(s) from 198.51.100.20; below threshold." "$report"; then
+        pass "Below-threshold activity reported correctly"
+    else
+        fail "Below-threshold activity reported correctly"
+    fi
+
+    # Test 10: Report avoids claiming that an alert proves malicious activity
+    if grep -Fq -- "Threshold alerts are indicators for review, not proof of malicious activity." "$report"; then
+        pass "Alert interpretation includes appropriate caution"
+    else
+        fail "Alert interpretation includes appropriate caution"
+    fi
 else
     fail "Report generated"
     echo "$output"
