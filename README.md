@@ -230,6 +230,39 @@ The repository includes the following sample reports to demonstrate the project'
 
 These examples are intended for demonstration and may be sanitized or reconstructed rather than verbatim copies of actual script output. Review generated reports for sensitive information before sharing them publicly.
 
+## Screenshots & Evidence
+
+The screenshots below demonstrate LinuxOps scripts, automated tests, and diagnostic reports.
+
+### System Baseline
+
+![LinuxOps system baseline output](screenshots/01-system-baseline.png)
+
+Shows system information and resource usage collected by the baseline script.
+
+### Automated Test Results
+
+![LinuxOps automated test results](screenshots/02-test-result-1.png)
+![LinuxOps automated test results](screenshots/02-test-result-2.png)
+![LinuxOps automated test results](screenshots/02-test-result-3.png)
+![LinuxOps automated test results](screenshots/02-test-result-4.png)
+![LinuxOps automated test results](screenshots/02-test-result-5.png)
+![LinuxOps automated test results](screenshots/02-test-result-6.png)
+
+Shows test output used to validate the project's diagnostic scripts.
+
+### Authentication Log Analysis
+
+![LinuxOps authentication analysis](screenshots/03-auth-log-analysis.png)
+
+Demonstrates analysis of sample SSH authentication events, including failed attempts and the summary.
+
+### Network Diagnostics
+
+![LinuxOps network diagnostics](screenshots/04-network-diagnostics.png)
+
+Shows example network troubleshooting information, including interfaces, routing, DNS, and listening ports.
+
 ## Security & Scope
 
 LinuxOps is a learning and portfolio project focused on defensive administration and basic diagnostics.
