@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 set -u
 
 echo "========================="
@@ -11,7 +12,7 @@ echo
 echo "-----DISK HEALTH-----"
 
 df -P -x tmpfs -x devtmpfs | awk '
-NR == 1 { prinT; next }
+NR == 1 { print; next }
 {
 usage =$5
 sub(/%/, "", usage)
@@ -38,7 +39,7 @@ usage = ($2 -$7)/$2*100
 printf "Memory usage :%.1f%%\n", usage
 
 if (usage >= 90)
-print "StatuS: WARNING"
+print "Status: WARNING"
 else
 print "Status: OK"
 }
@@ -46,7 +47,7 @@ print "Status: OK"
 echo
 
 #Load Information
-echo "-----FAILED SERVICES-----"
+echo "-----LOAD INFORMATION-----"
 uptime
 echo
 

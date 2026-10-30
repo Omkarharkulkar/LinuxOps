@@ -1,15 +1,15 @@
-
 #!/usr/bin/env bash
 
 set -uo pipefail
 
-PROJECT_DIR="$HOME/linuxops"
+PROJECT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 SCRIPT="$PROJECT_DIR/scripts/ssh_source_analyzer.sh"
 FIXTURE="$PROJECT_DIR/tests/fixtures/sample_auth.log"
-REPORT_DIR="$PROJECT_DIR/reports"
 
 PASS=0
 FAIL=0
+DEFAULT_REPORT=""
+CUSTOM_REPORT=""
 
 pass() {
     echo "[PASS] $1"
@@ -21,87 +21,113 @@ fail() {
     FAIL=$((FAIL + 1))
 }
 
+cleanup() {
+    [[ -n "$DEFAULT_REPORT" ]] && rm -f -- "$DEFAULT_REPORT"
+    [[ -n "$CUSTOM_REPORT" ]] && rm -f -- "$CUSTOM_REPORT"
+}
+
+trap cleanup EXIT
+
 echo "===== LINUXOPS SSH ANALYZER TESTS ====="
 
-# Test 1: Required files exist
 if [[ -f "$SCRIPT" && -f "$FIXTURE" ]]; then
     pass "Analyzer and sample log exist"
 else
     fail "Analyzer and sample log exist"
+    exit 1
 fi
 
-# Test 2: Bash syntax is valid
 if bash -n "$SCRIPT"; then
-    pass "Analyzer syntax"
+    pass "Analyzer syntax is valid"
 else
-    fail "Analyzer syntax"
+    fail "Analyzer syntax is valid"
+    exit 1
 fi
 
-# Test 3: Analyzer executes successfully
 if output=$(bash "$SCRIPT" "$FIXTURE" 2>&1); then
-    pass "Analyzer execution"
+    pass "Default-threshold execution"
 else
-    fail "Analyzer execution"
+    fail "Default-threshold execution"
     echo "$output"
+    exit 1
 fi
 
-# Test 4: Report is generated
-report=$(printf '%s\n' "$output" |
+DEFAULT_REPORT=$(printf '%s\n' "$output" |
     sed -n 's/^Report: //p' | tail -n 1)
 
-if [[ -n "$report" && -f "$report" ]]; then
-    pass "Report generated"
-
-    # Test 5: Expected source-IP counts
-    if grep -Eq '2[[:space:]]+192\.0\.2\.10' "$report"; then
-        pass "Two failed attempts from 192.0.2.10"
-    else
-        fail "Two failed attempts from 192.0.2.10"
-    fi
-
-    if grep -Eq '1[[:space:]]+198\.51\.100\.20' "$report"; then
-        pass "One failed attempt from 198.51.100.20"
-    else
-        fail "One failed attempt from 198.51.100.20"
-    fi
-
-    # Test 6: Successful login isn't counted as a failure
-    if ! grep -Eq '203\.0\.113\.15' "$report"; then
-        pass "Successful login excluded from failed-attempt counts"
-    else
-        fail "Successful login excluded from failed-attempt counts"
-    fi
-
-    # Test 7: Threshold findings section exists
-    if grep -Fq -- "----- THRESHOLD-BASED FINDINGS -----" "$report"; then
-        pass "Threshold-based findings section exists"
-    else
-        fail "Threshold-based findings section exists"
-    fi
-
-    # Test 8: Reaching the threshold triggers an alert
-    if grep -Fq -- "ALERT: 2 failed attempts from 192.0.2.10 (threshold: 2)" "$report"; then
-        pass "Alert generated when source reaches threshold"
-    else
-        fail "Alert generated when source reaches threshold"
-    fi
-
-    # Test 9: Below-threshold activity is informational
-    if grep -Fq -- "INFO: 1 failed attempt(s) from 198.51.100.20; below threshold." "$report"; then
-        pass "Below-threshold activity reported correctly"
-    else
-        fail "Below-threshold activity reported correctly"
-    fi
-
-    # Test 10: Report avoids claiming that an alert proves malicious activity
-    if grep -Fq -- "Threshold alerts are indicators for review, not proof of malicious activity." "$report"; then
-        pass "Alert interpretation includes appropriate caution"
-    else
-        fail "Alert interpretation includes appropriate caution"
-    fi
+if [[ -n "$DEFAULT_REPORT" && -f "$DEFAULT_REPORT" ]]; then
+    pass "Default-threshold report generated"
 else
-    fail "Report generated"
+    fail "Default-threshold report generated"
+    exit 1
+fi
+
+if grep -Fq 'Alert threshold: 5' "$DEFAULT_REPORT"; then
+    pass "Default threshold is five"
+else
+    fail "Default threshold is five"
+fi
+
+if grep -Eq '3[[:space:]]+192\.0\.2\.10' "$DEFAULT_REPORT"; then
+    pass "Three failed or invalid-user events counted for 192.0.2.10"
+else
+    fail "Three failed or invalid-user events counted for 192.0.2.10"
+fi
+
+if grep -Eq '1[[:space:]]+198\.51\.100\.20' "$DEFAULT_REPORT"; then
+    pass "One event counted for 198.51.100.20"
+else
+    fail "One event counted for 198.51.100.20"
+fi
+
+if ! grep -Fq 'ALERT:' "$DEFAULT_REPORT"; then
+    pass "No alert below the default threshold"
+else
+    fail "No alert below the default threshold"
+fi
+
+if grep -Fq '192.0.2.10' "$DEFAULT_REPORT" &&
+   grep -Fq '203.0.113.15' "$DEFAULT_REPORT"; then
+    pass "Successful authentication sources are included"
+else
+    fail "Successful authentication sources are included"
+fi
+
+if grep -Fq 'Both failed and successful SSH authentication events were recorded from 192.0.2.10.' "$DEFAULT_REPORT"; then
+    pass "Failed and successful events are correlated"
+else
+    fail "Failed and successful events are correlated"
+fi
+
+if output=$(bash "$SCRIPT" "$FIXTURE" 2 2>&1); then
+    pass "Custom-threshold execution"
+else
+    fail "Custom-threshold execution"
     echo "$output"
+    exit 1
+fi
+
+CUSTOM_REPORT=$(printf '%s\n' "$output" |
+    sed -n 's/^Report: //p' | tail -n 1)
+
+if [[ -n "$CUSTOM_REPORT" && -f "$CUSTOM_REPORT" ]]; then
+    pass "Custom-threshold report generated"
+else
+    fail "Custom-threshold report generated"
+    exit 1
+fi
+
+if grep -Fq 'Alert threshold: 2' "$CUSTOM_REPORT" &&
+   grep -Fq 'ALERT: 3 SSH authentication event(s) from 192.0.2.10 (threshold: 2)' "$CUSTOM_REPORT"; then
+    pass "Custom threshold triggers the expected alert"
+else
+    fail "Custom threshold triggers the expected alert"
+fi
+
+if grep -Fq 'indicators for investigation, not proof of malicious activity.' "$CUSTOM_REPORT"; then
+    pass "Report includes appropriate interpretation"
+else
+    fail "Report includes appropriate interpretation"
 fi
 
 echo
@@ -112,4 +138,4 @@ if (( FAIL > 0 )); then
     exit 1
 fi
 
-exit 0
+echo "RESULT: ALL TESTS PASSED"

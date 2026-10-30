@@ -1,11 +1,15 @@
+#!/usr/bin/env bash
 set -u
 
-PROJECT_DIR="$HOME/linuxops"
+PROJECT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 REPORT_DIR="$PROJECT_DIR/reports"
 TIMESTAMP=$(date '+%Y-%m-%d_%H-%M-%S')
 REPORT_FILE="$REPORT_DIR/system_baseline_$TIMESTAMP.txt"
 
-mkdir -p "$REPORT_DIR"
+if ! mkdir -p "$REPORT_DIR"; then
+    echo "Error: Could not create report directory: $REPORT_DIR" >&2
+    exit 1
+fi
 
 {
 

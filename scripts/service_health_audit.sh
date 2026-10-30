@@ -1,10 +1,14 @@
-
 #!/usr/bin/env bash
 
 # LinuxOps Service Health Auditor
 # Purpose: Read-only systemd service and resource inspection.
 
 set -u
+
+if ! command -v systemctl >/dev/null 2>&1; then
+    echo "WARNING: systemctl is unavailable; service audit cannot run."
+    exit 0
+fi
 
 echo "=========================================="
 echo " LINUXOPS SERVICE HEALTH AUDIT"

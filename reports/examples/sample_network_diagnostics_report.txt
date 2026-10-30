@@ -1,45 +1,73 @@
 ======================================
  LINUXOPS NETWORK DIAGNOSTICS REPORT
 ======================================
-Generated: Example report
+Generated: Fri Oct 30 06:55:10 PM IST 2026
 Hostname: linuxops-lab
 
 ----- NETWORK INTERFACES -----
-lo               UNKNOWN        127.0.0.1/8
-eth0             UP             192.0.2.25/24
+lo               UNKNOWN        127.0.0.1/8 ::1/128
+enp0s3           UP             192.0.2.15/24 [LINK_LOCAL_IPV6]/64
+enp0s8           UP             203.0.113.20/24
 
 ----- IPV4 ADDRESSES -----
 lo               UNKNOWN        127.0.0.1/8
-eth0             UP             192.0.2.25/24
+enp0s3           UP             192.0.2.15/24
+enp0s8           UP             203.0.113.20/24
 
 ----- ROUTING TABLE -----
-default via 192.0.2.1 dev eth0
-192.0.2.0/24 dev eth0
+default via 192.0.2.1 dev enp0s3 proto dhcp src 192.0.2.15 metric 100
+192.0.2.0/24 dev enp0s3 proto kernel scope link src 192.0.2.15 metric 100
+203.0.113.0/24 dev enp0s8 proto kernel scope link src 203.0.113.20 metric 101
 
 INFO: A default route is configured.
 
 ----- DNS CONFIGURATION -----
-DNS configuration is available.
-DNS server: [SANITIZED]
+Global
+         Protocols: -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+  resolv.conf mode: stub
+
+Link 2 (enp0s3)
+    Current Scopes: DNS
+         Protocols: +DefaultRoute -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
+Current DNS Server: 192.0.2.53
+       DNS Servers: 192.0.2.53
+
+Link 3 (enp0s8)
+    Current Scopes: none
+         Protocols: -DefaultRoute -LLMNR -mDNS -DNSOverTLS DNSSEC=no/unsupported
 
 ----- DNS RESOLUTION TEST -----
-example.com resolved successfully.
-
+172.66.147.243  STREAM example.com
+172.66.147.243  DGRAM
+172.66.147.243  RAW
+104.20.23.154   STREAM
+104.20.23.154   DGRAM
+104.20.23.154   RAW
+2606:4700:8ca5:72db:f2d7:4ba:ef6b:ff98 STREAM
+2606:4700:8ca5:72db:f2d7:4ba:ef6b:ff98 DGRAM
+2606:4700:8ca5:72db:f2d7:4ba:ef6b:ff98 RAW
 INFO: DNS/name resolution returned results for example.com.
 
 ----- LISTENING TCP AND UDP PORTS -----
-Netid  State   Local Address:Port
-udp    UNCONN  127.0.0.53:53
-tcp    LISTEN  127.0.0.53:53
-tcp    LISTEN  127.0.0.1:631
+Netid State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess
+udp   UNCONN 0      0            0.0.0.0:5353       0.0.0.0:*
+udp   UNCONN 0      0         127.0.0.54:53         0.0.0.0:*
+udp   UNCONN 0      0      127.0.0.53%lo:53         0.0.0.0:*
+udp   UNCONN 0      0            0.0.0.0:35354      0.0.0.0:*
+udp   UNCONN 0      0               [::]:5353          [::]:*
+udp   UNCONN 0      0               [::]:38702         [::]:*
+tcp   LISTEN 0      4096         0.0.0.0:22         0.0.0.0:*
+tcp   LISTEN 0      4096   127.0.0.53%lo:53         0.0.0.0:*
+tcp   LISTEN 0      4096      127.0.0.54:53         0.0.0.0:*
+tcp   LISTEN 0      4096       127.0.0.1:631        0.0.0.0:*
+tcp   LISTEN 0      4096           [::1]:631           [::]:*
+tcp   LISTEN 0      4096            [::]:22            [::]:*
 
 ----- ROUTE SELECTION TEST -----
-Route to 1.1.1.1 selected through the configured gateway.
-
+1.1.1.1 via 192.0.2.1 dev enp0s3 src 192.0.2.15 uid 1000
+    cache
 INFO: Linux found a route toward 1.1.1.1.
 
 ======================================
-End of sanitized example report
+Report saved to: reports/network_report_2026-10-30_18-55-10.txt
 ======================================
-
-Note: This is a sanitized presentation example, not a verbatim copy of the original diagnostic output. Network addresses and selected details have been replaced with documentation examples.

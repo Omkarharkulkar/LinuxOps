@@ -3,3 +3,5 @@ Oct 20 10:00:05 ubuntu sshd[1002]: Failed password for root from 192.0.2.10 port
 Oct 20 10:00:09 ubuntu sshd[1003]: Failed password for test from 198.51.100.20 port 51003 ssh2
 Oct 20 10:01:00 ubuntu sshd[1004]: Accepted password for student from 203.0.113.15 port 51004 ssh2
 Oct 20 10:02:00 ubuntu sudo: student : TTY=pts/0 ; COMMAND=/usr/bin/grep 'Failed password' /var/log/auth.log
+Oct 20 10:03:00 ubuntu sshd[1006]: Invalid user guest from 192.0.2.10 port 51006
+Oct 20 10:04:00 ubuntu sshd[1007]: Accepted password for student from 192.0.2.10 port 51007 ssh2

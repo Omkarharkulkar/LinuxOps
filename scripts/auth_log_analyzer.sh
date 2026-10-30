@@ -27,11 +27,11 @@ fi
 
 # Match actual authentication messages, not sudo command text.
 failed_pattern='sshd.*Failed password for '
-invalid_pattern='sshd.*Invalid user '
+invalid_pattern='sshd\[[^]]+\]: Invalid user '
 success_pattern='sshd.*Accepted (password|publickey) for '
 
 failed_count=$(grep -aEic "$failed_pattern" "$LOG_FILE" || true)
-invalid_count=$(grep -aEic "$invalid_pattern" "$LOG_FILE" || true)
+invalid_count=$(grep -aEc "$invalid_pattern" "$LOG_FILE" || true)
 success_count=$(grep -aEic "$success_pattern" "$LOG_FILE" || true)
 
 # Generate the report.
@@ -48,7 +48,7 @@ if ! {
     echo
 
     echo "----- INVALID SSH USER ATTEMPTS -----"
-    grep -aEi "$invalid_pattern" "$LOG_FILE" || true
+    grep -aE "$invalid_pattern" "$LOG_FILE" || true
     echo
 
     echo "----- SUCCESSFUL SSH AUTHENTICATION -----"

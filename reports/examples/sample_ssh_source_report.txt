@@ -1,0 +1,26 @@
+======================================
+ LINUXOPS SSH SOURCE-IP ANALYSIS
+======================================
+Generated: Fri Oct 30 06:56:23 PM IST 2026
+Log source: tests/fixtures/sample_auth.log
+Alert threshold: 5
+
+----- SSH AUTHENTICATION EVENTS BY SOURCE -----
+      3 192.0.2.10
+      1 198.51.100.20
+
+----- THRESHOLD-BASED FINDINGS -----
+INFO: 3 SSH authentication event(s) from 192.0.2.10; below threshold.
+INFO: 1 SSH authentication event(s) from 198.51.100.20; below threshold.
+
+----- SUCCESSFUL AUTHENTICATION BY SOURCE -----
+      1 203.0.113.15
+      1 192.0.2.10
+
+----- SOURCE-IP CORRELATION -----
+REVIEW: Both failed and successful SSH authentication events were recorded from 192.0.2.10.
+
+----- INTERPRETATION -----
+Repeated authentication events from one address may warrant investigation.
+An IP address associated with both failed and successful events may also warrant review.
+These findings are indicators for investigation, not proof of malicious activity.

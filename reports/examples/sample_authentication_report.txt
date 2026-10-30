@@ -1,7 +1,7 @@
 ======================================
  LINUXOPS AUTHENTICATION REPORT
 ======================================
-Generated: Sun Oct 25 11:37:21 AM IST 2026
+Generated: Fri Oct 30 06:55:45 PM IST 2026
 Log source: tests/fixtures/sample_auth.log
 
 ----- FAILED SSH PASSWORD ATTEMPTS -----
@@ -10,12 +10,13 @@ Oct 20 10:00:05 ubuntu sshd[1002]: Failed password for root from 192.0.2.10 port
 Oct 20 10:00:09 ubuntu sshd[1003]: Failed password for test from 198.51.100.20 port 51003 ssh2
 
 ----- INVALID SSH USER ATTEMPTS -----
-Oct 20 10:00:01 ubuntu sshd[1001]: Failed password for invalid user admin from 192.0.2.10 port 51001 ssh2
+Oct 20 10:03:00 ubuntu sshd[1006]: Invalid user guest from 192.0.2.10 port 51006
 
 ----- SUCCESSFUL SSH AUTHENTICATION -----
 Oct 20 10:01:00 ubuntu sshd[1004]: Accepted password for student from 203.0.113.15 port 51004 ssh2
+Oct 20 10:04:00 ubuntu sshd[1007]: Accepted password for student from 192.0.2.10 port 51007 ssh2
 
 ----- SUMMARY -----
 Failed SSH password events: 3
 Invalid SSH user events: 1
-Successful SSH authentications: 1
+Successful SSH authentications: 2
