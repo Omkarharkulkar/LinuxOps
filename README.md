@@ -46,7 +46,7 @@ Collects system information and performs basic health checks.
 - Memory and disk utilization
 - Network interface information
 - System load and failed-service checks
-- Timestamped diagnostic reports
+- Timestamped system baseline report
 
 **Scripts**
 - `scripts/system_baseline.sh`
@@ -86,8 +86,8 @@ Analyzes SSH authentication events from a supplied log file or the system's defa
 - Counts failed SSH password attempts
 - Identifies matching invalid-user events
 - Counts successful SSH authentications
-- Groups failed SSH password attempts by source IP
-- Flags repeated failures using a configurable-in-code threshold
+- Groups SSH authentication events by source IP
+- Flags repeated events using a configurable threshold (default: 5)
 - Generates timestamped reports
 
 **Scripts**
@@ -145,6 +145,11 @@ linuxops/
 │   ├── test_auth_log_analyzer.sh
 │   └── test_network_diagnostics.sh
 ├── reports/
+│   └── examples/
+│       ├── sample_system_baseline_report.txt
+│       ├── sample_network_diagnostics_report.txt
+│       ├── sample_authentication_report.txt
+│       └── sample_ssh_source_report.txt
 └── screenshots/
 ```
 
@@ -191,32 +196,30 @@ Review each module's README for its specific behavior and usage notes.
 
 ## Automated Testing
 
-LinuxOps includes six Bash test suites covering core functionality, script execution, report generation, log analysis, user and permission auditing, service auditing, and network diagnostics.
+LinuxOps includes a main test runner and five focused Bash test suites covering script execution, report generation, log analysis, user and permission auditing, service auditing, and network diagnostics.
 
 Run the complete test suite:
 
 ```bash
-for test in \
-    tests/test_linuxops.sh \
-    tests/test_ssh_source_analyzer.sh \
-    tests/test_user_audit.sh \
-    tests/test_service_health_audit.sh \
-    tests/test_auth_log_analyzer.sh \
-    tests/test_network_diagnostics.sh
-do
-    echo
-    echo "===== Running $test ====="
-    bash "$test" || exit 1
-done
+bash tests/test_linuxops.sh
 ```
 
-**Latest local validation:** All six test suites passed in the development environment.
+The main test runner executes the focused test suites and displays an aggregate result.
+
+**Latest local validation:** All checks in the main test runner and the five focused test suites passed in the development environment.
 
 The tests validate the scenarios they cover; they do not guarantee behavior on every Linux distribution or system configuration.
 
 ## Reports
 
-LinuxOps diagnostic scripts generate timestamped text reports under `reports/`.
+The following scripts generate timestamped text reports under `reports/`:
+
+- `system_baseline.sh`
+- `auth_log_analyzer.sh`
+- `ssh_source_analyzer.sh`
+- `network_diagnostics.sh`
+
+The system health, user audit, and service health scripts display their results in the terminal.
 
 Generated reports are ignored by Git by default because they may contain environment-specific information. Sanitized presentation examples are maintained in `reports/examples/`.
 
@@ -225,10 +228,11 @@ Generated reports are ignored by Git by default because they may contain environ
 The repository includes the following sample reports to demonstrate the project's output:
 
 - [System Baseline Report](reports/examples/sample_system_baseline_report.txt) — system information, memory usage, disk utilization, uptime, and network interfaces.
-- [Authentication Analysis Report](reports/examples/sample_authentication_report.txt) — failed SSH password attempts, invalid-user attempts, and successful authentications from a sample log.
 - [Network Diagnostics Report](reports/examples/sample_network_diagnostics_report.txt) — example network interfaces, routing, DNS, and listening-port information.
+- [Authentication Analysis Report](reports/examples/sample_authentication_report.txt) — failed SSH password attempts, invalid-user attempts, and successful authentications from a sample log.
+- [SSH Source Analysis Report](reports/examples/sample_ssh_source_report.txt) — authentication events grouped by source IP, threshold findings, and interpretation notes.
 
-These examples are intended for demonstration and may be sanitized or reconstructed rather than verbatim copies of actual script output. Review generated reports for sensitive information before sharing them publicly.
+The system baseline and network examples were generated in the lab and sanitized before being added to the repository. The authentication and SSH source examples were generated using the synthetic fixture at `tests/fixtures/sample_auth.log`. Review generated reports for sensitive information before sharing them publicly.
 
 ## Screenshots & Evidence
 
