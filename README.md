@@ -1,5 +1,7 @@
 # LinuxOps — Linux Administration & Security Analysis Lab
 
+[![LinuxOps Tests](https://github.com/Omkarharkulkar/LinuxOps/actions/workflows/linuxops-tests.yml/badge.svg)](https://github.com/Omkarharkulkar/LinuxOps/actions/workflows/linuxops-tests.yml)
+
 A hands-on Linux portfolio project demonstrating Bash scripting, system administration, security log analysis, network troubleshooting, and automated testing in an Ubuntu environment.
 
 ## Project Overview
@@ -97,6 +99,10 @@ Analyzes SSH authentication events from a supplied log file or the system's defa
 The project includes a synthetic authentication log fixture for repeatable testing.
 
 **Important:** Repeated failures are indicators for investigation, not proof of an attack. Log availability and permissions affect the results.
+
+**Analysis limitations:**
+- Source IP extraction in the SSH source analyzer currently supports IPv4 addresses only.
+- Failed and successful authentication events are correlated by source IP; event order and time intervals are not evaluated.
 
 ### Module 05 — Network Troubleshooting
 
@@ -219,7 +225,7 @@ The following scripts generate timestamped text reports under `reports/`:
 - `ssh_source_analyzer.sh`
 - `network_diagnostics.sh`
 
-The system health, user audit, and service health scripts display their results in the terminal.
+The scripts `system_health.sh`, `user_audit.sh`, and `service_health_audit.sh` display their results in the terminal rather than creating report files.
 
 Generated reports are ignored by Git by default because they may contain environment-specific information. Sanitized presentation examples are maintained in `reports/examples/`.
 

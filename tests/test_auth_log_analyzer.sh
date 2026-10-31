@@ -72,10 +72,10 @@ else
     fail "Three failed SSH password events detected"
 fi
 
-if grep -q 'Invalid SSH user events: 1' "$REPORT"; then
-    pass "One standalone invalid-user event detected"
+if grep -q 'Invalid SSH user events: 2' "$REPORT"; then
+    pass "Two invalid-user events detected"
 else
-    fail "One standalone invalid-user event detected"
+    fail "Two invalid-user events detected"
 fi
 
 if grep -q 'Successful SSH authentications: 2' "$REPORT"; then

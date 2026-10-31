@@ -68,10 +68,18 @@ else
     fail "Default threshold is five"
 fi
 
-if grep -Eq '3[[:space:]]+192\.0\.2\.10' "$DEFAULT_REPORT"; then
-    pass "Three failed or invalid-user events counted for 192.0.2.10"
+if grep -A1 -F -- '----- FAILED PASSWORD ATTEMPTS BY SOURCE -----' "$DEFAULT_REPORT" |
+    grep -Eq '2[[:space:]]+192\.0\.2\.10'; then
+    pass "Two failed-password attempts counted without double counting"
 else
-    fail "Three failed or invalid-user events counted for 192.0.2.10"
+    fail "Two failed-password attempts counted without double counting"
+fi
+
+if grep -A1 -F -- '----- STANDALONE INVALID-USER EVENTS BY SOURCE -----' "$DEFAULT_REPORT" |
+    grep -Eq '2[[:space:]]+192\.0\.2\.10'; then
+    pass "Invalid-user events counted separately"
+else
+    fail "Invalid-user events counted separately"
 fi
 
 if grep -Eq '1[[:space:]]+198\.51\.100\.20' "$DEFAULT_REPORT"; then
@@ -118,7 +126,7 @@ else
 fi
 
 if grep -Fq 'Alert threshold: 2' "$CUSTOM_REPORT" &&
-   grep -Fq 'ALERT: 3 SSH authentication event(s) from 192.0.2.10 (threshold: 2)' "$CUSTOM_REPORT"; then
+   grep -Fq 'ALERT: 2 SSH authentication event(s) from 192.0.2.10 (threshold: 2)' "$CUSTOM_REPORT"; then
     pass "Custom threshold triggers the expected alert"
 else
     fail "Custom threshold triggers the expected alert"

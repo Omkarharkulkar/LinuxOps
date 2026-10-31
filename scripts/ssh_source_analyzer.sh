@@ -32,12 +32,22 @@ if ! mkdir -p "$REPORT_DIR"; then
     exit 1
 fi
 
-# Include failed-password messages and standalone invalid-user messages.
-failed_pattern='sshd.*Failed password for |sshd\[[^]]+\]: Invalid user '
+# Count failed-password attempts separately from invalid-user events.
+failed_pattern='sshd.*Failed password for '
+invalid_user_pattern='sshd\[[^]]+\]: Invalid user '
 success_pattern='sshd.*Accepted (password|publickey) for '
 
 FAILED_COUNTS="$(
     grep -aE "$failed_pattern" "$LOG_FILE" |
+        grep -oE 'from ([0-9]{1,3}\.){3}[0-9]{1,3}' |
+        awk '{print $2}' |
+        sort |
+        uniq -c |
+        sort -nr || true
+)"
+
+INVALID_USER_COUNTS="$(
+    grep -aE "$invalid_user_pattern" "$LOG_FILE" |
         grep -oE 'from ([0-9]{1,3}\.){3}[0-9]{1,3}' |
         awk '{print $2}' |
         sort |
@@ -68,12 +78,12 @@ if ! {
     echo "Alert threshold: $THRESHOLD"
     echo
 
-    echo "----- SSH AUTHENTICATION EVENTS BY SOURCE -----"
+    echo "----- FAILED PASSWORD ATTEMPTS BY SOURCE -----"
 
     if [[ -n "$FAILED_COUNTS" ]]; then
         printf '%s\n' "$FAILED_COUNTS"
     else
-        echo "No failed-password or standalone invalid-user events with source IPs were found."
+        echo "No failed-password attempts with source IPs were found."
     fi
 
     echo
@@ -93,6 +103,15 @@ if ! {
                     "$COUNT" "$IP"
             fi
         done <<< "$FAILED_COUNTS"
+    fi
+
+    echo
+    echo "----- STANDALONE INVALID-USER EVENTS BY SOURCE -----"
+
+    if [[ -n "$INVALID_USER_COUNTS" ]]; then
+        printf '%s\n' "$INVALID_USER_COUNTS"
+    else
+        echo "No standalone invalid-user events with source IPs were found."
     fi
 
     echo
