@@ -126,7 +126,7 @@ else
 fi
 
 if grep -Fq 'Alert threshold: 2' "$CUSTOM_REPORT" &&
-   grep -Fq 'ALERT: 2 SSH authentication event(s) from 192.0.2.10 (threshold: 2)' "$CUSTOM_REPORT"; then
+   grep -Fq 'ALERT: 2 failed password attempt(s) from 192.0.2.10 (threshold: 2)' "$CUSTOM_REPORT"; then
     pass "Custom threshold triggers the expected alert"
 else
     fail "Custom threshold triggers the expected alert"

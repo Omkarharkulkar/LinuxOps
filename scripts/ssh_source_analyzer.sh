@@ -96,10 +96,10 @@ if ! {
             [[ -n "${COUNT:-}" && -n "${IP:-}" ]] || continue
 
             if (( COUNT >= THRESHOLD )); then
-                printf 'ALERT: %s SSH authentication event(s) from %s (threshold: %s)\n' \
+                printf 'ALERT: %s failed password attempt(s) from %s (threshold: %s)\n' \
                     "$COUNT" "$IP" "$THRESHOLD"
             else
-                printf 'INFO: %s SSH authentication event(s) from %s; below threshold.\n' \
+                printf 'INFO: %s failed password attempt(s) from %s; below threshold.\n' \
                     "$COUNT" "$IP"
             fi
         done <<< "$FAILED_COUNTS"
